@@ -1,6 +1,29 @@
 package com.galvanize.autosapi;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+@WebMvcTest(AutosController.class)
 public class AutosControllerTest {
+  @Autowired
+  MockMvc mockMvc;
+
+  @Test
+  void getRequest_noParams_SuccessfullyReturnsAllAutos() throws Exception {
+    mockMvc.perform(get("/api/autos"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.automobiles", hasSize(5)));
+  }
   //GETALL
 // GET: /api/autos returns list of all autos in database
 // GET: /api/autos no autos in database returns 204 no content
