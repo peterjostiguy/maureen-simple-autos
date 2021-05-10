@@ -25,25 +25,27 @@ public class AutosControllerTest {
   @MockBean
   AutosService autosService;
 
-//  ArrayList<Auto> autoList;
+  ArrayList<Auto> autoList;
 
   @BeforeEach
   void setUp() {
-    for (int i = 0; i < 5; i++) {
-      autosService.autoList.add(new Auto());
-    }
+    autoList = new ArrayList<>();
+    autoList.add(new Auto("Ford", "green"));
+    autoList.add(new Auto("Honda", "red"));
+    autoList.add(new Auto("Nissan", "gold"));
+
   }
 
 
   @Test
   void getRequest_noParams_SuccessfullyReturnsAllAutos() throws Exception {
 
-    when(autosService.getAutos()).thenReturn(autosService.autoList);
-
+    when(autosService.getAutos()).thenReturn(autoList);
+//
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(5)));
+        .andExpect(jsonPath("$", hasSize(3)));
   }
   //GETALL
 // GET: /api/autos returns list of all autos in database
