@@ -1,5 +1,6 @@
 package com.galvanize.autosapi;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,8 +16,10 @@ public class AutosController {
     }
 
     @GetMapping("/api/autos")
-    public ArrayList<Auto> getAutos() {
-        return autosService.getAutos();
+    public ResponseEntity<ArrayList<Auto>> getAutos() {
+        ArrayList<Auto> autoList = autosService.getAutos();
+        return autoList.size() == 0 ? ResponseEntity.noContent().build() :
+            ResponseEntity.ok(autoList);
     }
 
 

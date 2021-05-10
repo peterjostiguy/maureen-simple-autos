@@ -56,7 +56,7 @@ public class AutosControllerTest {
 
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
-        .andExpect(jsonPath("$", hasSize(0)));
+        .andExpect(status().isNoContent());
 //        .andExpect(status().isNoContent());
   }
 
