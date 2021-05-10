@@ -27,7 +27,6 @@ public class AutosControllerTest {
 
   ArrayList<Auto> autoList;
 
-  @BeforeEach
   void setUp() {
     autoList = new ArrayList<>();
     autoList.add(new Auto("Ford", "green"));
@@ -36,20 +35,31 @@ public class AutosControllerTest {
 
   }
 
-
+  //GETALL
+// GET: /api/autos returns list of all autos in database
   @Test
   void getRequest_noParams_SuccessfullyReturnsAllAutos() throws Exception {
-
+    setUp();
     when(autosService.getAutos()).thenReturn(autoList);
-//
+
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)));
   }
-  //GETALL
-// GET: /api/autos returns list of all autos in database
+
 // GET: /api/autos no autos in database returns 204 no content
+
+  @Test
+  void getRequest_noParams_SuccessfullyReturns204Code() throws Exception {
+    when(autosService.getAutos()).thenReturn(autoList);
+
+    mockMvc.perform(get("/api/autos"))
+        .andDo(print())
+        .andExpect(jsonPath("$", hasSize(0)));
+//        .andExpect(status().isNoContent());
+  }
+
 // GET: /api/autos?color=BLUE returns blue cars
 // GET: /api/autos?make=Honda returns all Honda cars
 // GET: /api/autos?make=Honda&color=SILVER returns all silver Honda cars
