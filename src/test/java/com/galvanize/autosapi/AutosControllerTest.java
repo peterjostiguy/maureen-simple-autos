@@ -1,28 +1,49 @@
 package com.galvanize.autosapi;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.ArrayList;
 
 @WebMvcTest(AutosController.class)
 public class AutosControllerTest {
   @Autowired
   MockMvc mockMvc;
 
+  @MockBean
+  AutosService autosService;
+
+//  ArrayList<Auto> autoList;
+
+  @BeforeEach
+  void setUp() {
+    for (int i = 0; i < 5; i++) {
+      autosService.autoList.add(new Auto());
+    }
+  }
+
+
   @Test
   void getRequest_noParams_SuccessfullyReturnsAllAutos() throws Exception {
+
+    when(autosService.getAutos()).thenReturn(autosService.autoList);
+
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.automobiles", hasSize(5)));
+        .andExpect(jsonPath("$", hasSize(5)));
   }
   //GETALL
 // GET: /api/autos returns list of all autos in database
