@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AutosService {
 
-    protected ArrayList<Auto> autoList = new ArrayList<Auto>();
+//    protected ArrayList<Auto> autoList = new ArrayList<Auto>();
+    public AutosList autoList;
 
     public AutosService() {
 
     }
 
-    public ArrayList<Auto> getAutos() {
+    public AutosList getAutos() {
         return autoList;
     };
 

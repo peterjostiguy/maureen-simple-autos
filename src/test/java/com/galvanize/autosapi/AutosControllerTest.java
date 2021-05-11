@@ -61,6 +61,11 @@ public class AutosControllerTest {
   }
 
 // GET: /api/autos?color=BLUE returns blue cars
+//  @Test
+//  void getRequest_params_SuccessfullyReturnsBlueCars() throws Exception {
+//    when(autosService.getAutosByColor()).thenReturn()
+//  }
+
 // GET: /api/autos?make=Honda returns all Honda cars
 // GET: /api/autos?make=Honda&color=SILVER returns all silver Honda cars
 
