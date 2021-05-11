@@ -102,6 +102,11 @@ void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
           .andExpect(status().isNoContent());
 }
 
+  //POST
+// POST: /api/autos returns a newly created car
+// POST: /api/autos?make=Ford returns a newly created Ford car
+// POST: /api/autos?color=BLUE returns a newly created blue car
+// POST: /api/autos?make=Ford&color=GOLD returns a newly created gold Ford car
 @Test
   void postRequest_Params_SuccessfullyPostsCar() throws Exception {
     when(autosService.addAuto(any(Auto.class))).thenReturn(new Auto("red", "Honda"));
@@ -114,12 +119,16 @@ void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
         .andExpect(jsonPath("make").value("Honda"));
 }
 
-  //POST
-// POST: /api/autos returns a newly created car
-// POST: /api/autos?make=Ford returns a newly created Ford car
-// POST: /api/autos?color=BLUE returns a newly created blue car
-// POST: /api/autos?make=Ford&color=GOLD returns a newly created gold Ford car
 // POST: /api/autos returns a 400 error if there is a bad request
+@Test
+void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
+  when(autosService.addAuto(any(Auto.class))).thenThrow(InvalidAutoException.class);
+
+  mockMvc.perform(post("/api/autos")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content("{\"color\":\"red\", \"make\":\"Honda\"}"))
+          .andExpect(status().isBadRequest());
+}
 
   //PATCH
 // PATCH: /api/autos/{vin} updates and returns the specified vehicle

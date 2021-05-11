@@ -11,9 +11,9 @@ public class Auto {
 
   }
 
-  public Auto(String make, String color) {
-    this.make = make;
+  public Auto(String color, String make) {
     this.color = color;
+    this.make = make;
 //    this.year = year;
 //    this.vin = vin;
   }
