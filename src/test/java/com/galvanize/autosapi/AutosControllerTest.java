@@ -1,6 +1,7 @@
 package com.galvanize.autosapi;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -57,10 +58,18 @@ public class AutosControllerTest {
   }
 
 // GET: /api/autos?color=BLUE returns blue cars
-//  @Test
-//  void getRequest_params_SuccessfullyReturnsBlueCars() throws Exception {
-//    when(autosService.getAutosByColor()).thenReturn()
-//  }
+  @Test
+  void getRequest_params_SuccessfullyReturnsCorrectCars() throws Exception {
+
+    setUp();
+    when(autosService.getAutos(anyString(),anyString())).thenReturn(new AutosList(autosList.list));
+
+    mockMvc.perform(get("/api/autos?color=red&make=Honda"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.list", hasSize(1)));
+
+  }
 
 // GET: /api/autos?make=Honda returns all Honda cars
 // GET: /api/autos?make=Honda&color=SILVER returns all silver Honda cars
