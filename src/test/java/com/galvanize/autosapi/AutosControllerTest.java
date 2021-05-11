@@ -75,17 +75,30 @@ public class AutosControllerTest {
 // GET: /api/autos/{vin} returns specific car with the VIN number specified
 @Test
   public void getRequest_vinParam_ReturnsSingleCar() throws Exception{
-    setUp();
-    when(autosService.getAutoByVin(anyString())).thenReturn(null);
+//    setUp();
+    autosList = new AutosList();
+    Auto auto1 = new Auto("abc123");
+    autosList.list.add(auto1);
+    autosList.list.add(new Auto("123abc"));
 
-    mockMvc.perform(get("/api/autos/{vin}"))
+    when(autosService.getAutoByVin(anyString())).thenReturn(auto1);
+
+    mockMvc.perform(get("/api/autos/" + auto1.getVin()))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(3)));
+        .andExpect(jsonPath("vin").value("abc123"));
 }
 
-
 // GET: /api/autos/{vin} returns NoContent 204 error
+@Test
+void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
+  when(autosService.getAutoByVin(anyString())).thenReturn(new Auto());
+
+  mockMvc.perform(get("/api/autos/mvk342"))
+          .andDo(print())
+          .andExpect(status().isNoContent());
+}
+
 
   //POST
 // POST: /api/autos returns a newly created car

@@ -5,7 +5,7 @@ public class Auto {
   private String color;
   private String make;
 //  private Integer year;
-//  private String vin;
+  private String vin;
 
   public Auto() {
 
@@ -16,6 +16,18 @@ public class Auto {
     this.color = color;
 //    this.year = year;
 //    this.vin = vin;
+  }
+
+  public Auto(String vin) {
+    this.vin = vin;
+  }
+
+  public String getVin() {
+    return vin;
+  }
+
+  public void setVin(String vin) {
+    this.vin = vin;
   }
 
   public String getColor() {
