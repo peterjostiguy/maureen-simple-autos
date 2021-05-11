@@ -4,8 +4,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,9 +28,9 @@ public class AutosControllerTest {
 
   void setUp() {
     autosList = new AutosList();
-    autosList.list.add(new Auto("Ford", "green"));
-    autosList.list.add(new Auto("Honda", "red"));
-    autosList.list.add(new Auto("Nissan", "gold"));
+    autosList.list.add(new Auto("green", "Ford", "joe"));
+    autosList.list.add(new Auto("red", "Honda", "bob"));
+    autosList.list.add(new Auto("gold", "Nissan", "lucy"));
 
   }
 
@@ -109,7 +108,7 @@ void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
 // POST: /api/autos?make=Ford&color=GOLD returns a newly created gold Ford car
 @Test
   void postRequest_Params_SuccessfullyPostsCar() throws Exception {
-    when(autosService.addAuto(any(Auto.class))).thenReturn(new Auto("red", "Honda"));
+    when(autosService.addAuto(any(Auto.class))).thenReturn(new Auto("red", "Honda", "jay"));
 
     mockMvc.perform(post("/api/autos")
         .contentType(MediaType.APPLICATION_JSON)
@@ -132,6 +131,22 @@ void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
 
   //PATCH
 // PATCH: /api/autos/{vin} updates and returns the specified vehicle
+  @Test
+  void updateRequest_vinParam_ReturnsUpdatedAuto() throws Exception {
+    autosList = new AutosList();
+    Auto auto1 = new Auto("abc123");
+    autosList.list.add(auto1);
+
+    when(autosService.updateAuto(anyString(),anyString(),anyString())).thenReturn(auto1);
+
+    mockMvc.perform(patch("/api/autos/" + auto1.getVin())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"color\":\"purple\", \"owner\":\"roy\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("color").value("purple"))
+            .andExpect(jsonPath("owner").value("roy"));
+  }
+
 // PATCH: /api/autos/{vin} returns a 204 error if vehicle is not found
 // PATCH: /api/autos/{vin} returns a 400 error if there is a bad request
 

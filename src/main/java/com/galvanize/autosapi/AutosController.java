@@ -38,6 +38,17 @@ public class AutosController {
         return autosService.addAuto(auto);
     }
 
+    @PatchMapping("api/autos/{vin}")
+    public Auto updateAuto(@PathVariable String vin, @RequestBody UpdateRequest updateRequest) {
+
+        Auto auto = autosService.updateAuto(vin, updateRequest.getColor(), updateRequest.getOwner());
+        auto.setColor(updateRequest.getColor());
+        auto.setOwner(updateRequest.getOwner());
+
+        return auto;
+    }
+
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void InvalidAutoExceptionHandler(InvalidAutoException invalidAutoException) {

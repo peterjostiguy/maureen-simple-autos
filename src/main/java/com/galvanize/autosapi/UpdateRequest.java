@@ -1,8 +1,8 @@
 package com.galvanize.autosapi;
 
 public class UpdateRequest {
-    private String owner;
     private String color;
+    private String owner;
 
     public String getOwner() {
         return owner;

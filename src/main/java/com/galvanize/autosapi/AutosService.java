@@ -31,4 +31,8 @@ public class AutosService {
     public Auto addAuto(Auto auto) {
         return null;
     }
+
+    public Auto updateAuto(String vin, String color, String owner) {
+        return null;
+    }
 }

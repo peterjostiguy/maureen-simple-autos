@@ -12,9 +12,10 @@ public class Auto {
 
   }
 
-  public Auto(String color, String make) {
+  public Auto(String color, String make, String owner) {
     this.color = color;
     this.make = make;
+    this.owner = owner;
 //    this.year = year;
 //    this.vin = vin;
   }
@@ -47,7 +48,15 @@ public class Auto {
     this.make = make;
   }
 
-//  @Override
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+  //  @Override
 //  public String toString() {return make + ", " + color;}
 
 }
