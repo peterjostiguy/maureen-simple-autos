@@ -48,7 +48,7 @@ public class AutosControllerTest {
 
   @Test
   void getRequest_noParams_SuccessfullyReturns204Code() throws Exception {
-    when(autosService.getAutos()).thenReturn(autosList);
+    when(autosService.getAutos()).thenReturn(new AutosList());
 
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
