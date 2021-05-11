@@ -54,7 +54,6 @@ public class AutosControllerTest {
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
         .andExpect(status().isNoContent());
-//        .andExpect(status().isNoContent());
   }
 
 // GET: /api/autos?color=BLUE returns blue cars
@@ -82,7 +81,7 @@ public class AutosControllerTest {
     mockMvc.perform(get("/api/autos/{vin}"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.list", hasSize(3)));
+        .andExpect(jsonPath("$", hasSize(3)));
 }
 
 
