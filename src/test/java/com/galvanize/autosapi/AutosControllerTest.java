@@ -1,9 +1,11 @@
 package com.galvanize.autosapi;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AutosController.class)
@@ -92,13 +95,24 @@ public class AutosControllerTest {
 // GET: /api/autos/{vin} returns NoContent 204 error
 @Test
 void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
-  when(autosService.getAutoByVin(anyString())).thenReturn(new Auto());
+  when(autosService.getAutoByVin(anyString())).thenReturn(null);
 
   mockMvc.perform(get("/api/autos/mvk342"))
           .andDo(print())
           .andExpect(status().isNoContent());
 }
 
+@Test
+  void postRequest_Params_SuccessfullyPostsCar() throws Exception {
+    when(autosService.addAuto(any(Auto.class))).thenReturn(new Auto("red", "Honda"));
+
+    mockMvc.perform(post("/api/autos")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"color\":\"red\", \"make\":\"Honda\"}"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("color").value("red"))
+        .andExpect(jsonPath("make").value("Honda"));
+}
 
   //POST
 // POST: /api/autos returns a newly created car

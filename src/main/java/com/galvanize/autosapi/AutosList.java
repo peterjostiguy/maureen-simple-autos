@@ -1,6 +1,7 @@
 package com.galvanize.autosapi;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AutosList {
 
@@ -20,6 +21,19 @@ public class AutosList {
 
   public void setList(ArrayList<Auto> list) {
     this.list = list;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    AutosList autosList = (AutosList) o;
+    return Objects.equals(list, autosList.list);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(list);
   }
 
   @Override

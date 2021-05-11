@@ -28,4 +28,7 @@ public class AutosService {
         return null;
     }
 
+    public Auto addAuto(Auto auto) {
+        return null;
+    }
 }
