@@ -58,6 +58,8 @@ public class AutosControllerTest {
   }
 
 // GET: /api/autos?color=BLUE returns blue cars
+// GET: /api/autos?make=Honda returns all Honda cars
+// GET: /api/autos?make=Honda&color=SILVER returns all silver Honda cars
   @Test
   void getRequest_params_SuccessfullyReturnsCorrectCars() throws Exception {
 
@@ -67,15 +69,23 @@ public class AutosControllerTest {
     mockMvc.perform(get("/api/autos?color=red&make=Honda"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.list", hasSize(1)));
-
+            .andExpect(jsonPath("$.list", hasSize(3)));
   }
-
-// GET: /api/autos?make=Honda returns all Honda cars
-// GET: /api/autos?make=Honda&color=SILVER returns all silver Honda cars
 
   // GET
 // GET: /api/autos/{vin} returns specific car with the VIN number specified
+@Test
+  public void getRequest_vinParam_ReturnsSingleCar() throws Exception{
+    setUp();
+    when(autosService.getAutoByVin(anyString())).thenReturn(null);
+
+    mockMvc.perform(get("/api/autos/{vin}"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.list", hasSize(3)));
+}
+
+
 // GET: /api/autos/{vin} returns NoContent 204 error
 
   //POST
