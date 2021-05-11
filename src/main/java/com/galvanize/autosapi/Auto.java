@@ -6,6 +6,7 @@ public class Auto {
   private String make;
 //  private Integer year;
   private String vin;
+  private String owner;
 
   public Auto() {
 
