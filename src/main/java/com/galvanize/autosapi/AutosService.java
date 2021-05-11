@@ -17,7 +17,7 @@ public class AutosService {
     }
 
     public AutosList getAutos() {
-        return autoList;
+        return null;
     };
 
 

@@ -7,15 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.ArrayList;
 
 @WebMvcTest(AutosController.class)
 public class AutosControllerTest {
@@ -25,13 +21,13 @@ public class AutosControllerTest {
   @MockBean
   AutosService autosService;
 
-  ArrayList<Auto> autoList;
+  AutosList autosList;
 
   void setUp() {
-    autoList = new ArrayList<>();
-    autoList.add(new Auto("Ford", "green"));
-    autoList.add(new Auto("Honda", "red"));
-    autoList.add(new Auto("Nissan", "gold"));
+    autosList = new AutosList();
+    autosList.list.add(new Auto("Ford", "green"));
+    autosList.list.add(new Auto("Honda", "red"));
+    autosList.list.add(new Auto("Nissan", "gold"));
 
   }
 
@@ -40,19 +36,19 @@ public class AutosControllerTest {
   @Test
   void getRequest_noParams_SuccessfullyReturnsAllAutos() throws Exception {
     setUp();
-    when(autosService.getAutos()).thenReturn(autoList);
+    when(autosService.getAutos()).thenReturn(autosList);
 
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(3)));
+        .andExpect(jsonPath("$.list", hasSize(3)));
   }
 
 // GET: /api/autos no autos in database returns 204 no content
 
   @Test
   void getRequest_noParams_SuccessfullyReturns204Code() throws Exception {
-    when(autosService.getAutos()).thenReturn(autoList);
+    when(autosService.getAutos()).thenReturn(autosList);
 
     mockMvc.perform(get("/api/autos"))
         .andDo(print())

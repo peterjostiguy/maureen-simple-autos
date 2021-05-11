@@ -4,8 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-
 @RestController
 public class AutosController {
 
@@ -16,10 +14,10 @@ public class AutosController {
     }
 
     @GetMapping("/api/autos")
-    public ResponseEntity<ArrayList<Auto>> getAutos() {
-        ArrayList<Auto> autoList = autosService.getAutos();
-        return autoList.size() == 0 ? ResponseEntity.noContent().build() :
-            ResponseEntity.ok(autoList);
+    public ResponseEntity<AutosList> getAutos() {
+        AutosList autosList = autosService.getAutos();
+        return autosList.list.size() == 0 ? ResponseEntity.noContent().build() :
+            ResponseEntity.ok(autosList);
     }
 
 
