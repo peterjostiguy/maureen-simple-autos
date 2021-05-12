@@ -32,7 +32,7 @@ public class AutosService {
         return null;
     }
 
-    public Auto updateAuto(String vin, String color, String owner) {
+    public Auto saveAuto(Auto auto) {
         return null;
     }
 

@@ -40,20 +40,26 @@ public class AutosController {
     }
 
     @PatchMapping("/{vin}")
-    public Auto updateAuto(@PathVariable String vin, @RequestBody UpdateRequest updateRequest) {
-
-        Auto auto = autosService.updateAuto(vin, updateRequest.getColor(), updateRequest.getOwner());
-        auto.setColor(updateRequest.getColor());
-        auto.setOwner(updateRequest.getOwner());
-
-        return auto;
+    public ResponseEntity<Auto> updateAuto(@PathVariable String vin, @RequestBody UpdateRequest updateRequest) {
+        Auto auto = autosService.getAutoByVin(vin);
+        if(auto == null){
+            return ResponseEntity.noContent().build();
+        } else {
+            auto.setOwner(updateRequest.getOwner());
+            auto.setColor(updateRequest.getColor());
+            auto = autosService.saveAuto(auto);
+            return ResponseEntity.ok(auto);
+        }
     }
 
+<<<<<<< HEAD
     @DeleteMapping("/{vin}")
     public ResponseEntity deleteAuto(@PathVariable String vin) {
         return getAutoByVin(vin) == null ? ResponseEntity.noContent().build() : ResponseEntity.accepted().build();
     }
 
+=======
+>>>>>>> patch_branch
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void InvalidAutoExceptionHandler(InvalidAutoException invalidAutoException) {
