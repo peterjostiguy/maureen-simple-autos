@@ -32,12 +32,32 @@ public class AutosServiceTest {
   }
 
   @Test
-  public void getAllAutos() {
+  public void getAutos() {
 
     when(autosRepository.findAll()).thenReturn(testAutosList);
     AutosList actual = autosService.getAutos();
 
     assertEquals(testAutosList.size(), actual.getAutos().size());
+  }
+
+  @Test
+  void testGetAutos() {
+  }
+
+  @Test
+  void getAutoByVin() {
+  }
+
+  @Test
+  void addAuto() {
+  }
+
+  @Test
+  void saveAuto() {
+  }
+
+  @Test
+  void deleteAuto() {
   }
 
 //  @Test

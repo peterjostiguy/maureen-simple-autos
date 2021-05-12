@@ -23,9 +23,10 @@ public class AutosController {
         } else {
             autosList = autosService.getAutos(color, make);
         }
-        return null;
-//        return autosList.autos.size() == 0 ? ResponseEntity.noContent().build() :
-//            ResponseEntity.ok(autosList);
+        if (autosList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(autosList);
     }
 
     @GetMapping("/{vin}")
