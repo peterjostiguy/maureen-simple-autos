@@ -56,6 +56,12 @@ public class AutosServiceTest {
 
   @Test
   void getAutoByVin() {
+    Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
+    when(autosRepository.findByVin(anyString())).thenReturn(auto);
+    Auto actual = autosService.getAutoByVin("abc1230");
+    assertNotNull(actual);
+    assertEquals(actual.getMake(), "honda");
+
   }
 
   @Test

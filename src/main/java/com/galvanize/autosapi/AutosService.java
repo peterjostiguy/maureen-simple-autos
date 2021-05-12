@@ -26,7 +26,7 @@ public class AutosService {
     }
 
     public Auto getAutoByVin(String vin) {
-        return null;
+        return autosRepository.findByVin(vin);
     }
 
     public Auto addAuto(Auto auto) {
