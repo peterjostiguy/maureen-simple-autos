@@ -4,8 +4,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -129,9 +128,34 @@ void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
 
   //PATCH
 // PATCH: /api/autos/{vin} updates and returns the specified vehicle
+  @Test
+  void patchRequest_params_returnsPatchedAuto() throws Exception {
+    Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
+    auto.setColor("purple");
+    auto.setOwner("bob");
+    when(autosService.getAutoByVin(anyString())).thenReturn(auto);
+    when(autosService.saveAuto(any(Auto.class))).thenReturn(auto);
+
+    mockMvc.perform(patch("/api/autos/" + auto.getVin())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{ \"color\":\"purple\",\"owner\":\"rob\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("color").value("purple"))
+            .andExpect(jsonPath("owner").value("rob"));
+  }
+
 // PATCH: /api/autos/{vin} returns a 204 error if vehicle is not found
 // PATCH: /api/autos/{vin} returns a 400 error if there is a bad request
+  @Test
+  void patchRequest_vinParam_SuccessfullyReturnsBadRequest() throws Exception {
+    when(autosService.getAutoByVin(anyString())).thenReturn(null);
 
+    mockMvc.perform(patch("/api/autos/mvk342")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{ \"color\":\"purple\",\"owner\":\"bob\"}"))
+            .andDo(print())
+            .andExpect(status().isNoContent());
+  }
 
   //DELETE
 // DELETE: /api/autos/{vin} Returns 202 response if delete request accepted

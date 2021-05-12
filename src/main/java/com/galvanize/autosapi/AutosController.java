@@ -40,15 +40,17 @@ public class AutosController {
     }
 
     @PatchMapping("/{vin}")
-    public Auto updateAuto(@PathVariable String vin, @RequestBody UpdateRequest updateRequest) {
-
-        Auto auto = autosService.updateAuto(vin, updateRequest.getColor(), updateRequest.getOwner());
-        auto.setColor(updateRequest.getColor());
-        auto.setOwner(updateRequest.getOwner());
-
-        return auto;
+    public ResponseEntity<Auto> updateAuto(@PathVariable String vin, @RequestBody UpdateRequest updateRequest) {
+        Auto auto = autosService.getAutoByVin(vin);
+        if(auto == null){
+            return ResponseEntity.noContent().build();
+        } else {
+            auto.setOwner(updateRequest.getOwner());
+            auto.setColor(updateRequest.getColor());
+            auto = autosService.saveAuto(auto);
+            return ResponseEntity.ok(auto);
+        }
     }
-
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
