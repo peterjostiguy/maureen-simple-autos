@@ -68,4 +68,16 @@ public class Auto {
   public void setOwner(String owner) {
     this.owner = owner;
   }
+
+  @Override
+  public String toString() {
+    return "Auto{" +
+        "color='" + color + '\'' +
+        ", make='" + make + '\'' +
+        ", model='" + model + '\'' +
+        ", year=" + year +
+        ", vin='" + vin + '\'' +
+        ", owner='" + owner + '\'' +
+        '}';
+  }
 }
