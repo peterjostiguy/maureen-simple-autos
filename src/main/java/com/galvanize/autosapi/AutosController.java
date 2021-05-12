@@ -53,14 +53,11 @@ public class AutosController {
         }
     }
 
-<<<<<<< HEAD
     @DeleteMapping("/{vin}")
     public ResponseEntity deleteAuto(@PathVariable String vin) {
         return getAutoByVin(vin) == null ? ResponseEntity.noContent().build() : ResponseEntity.accepted().build();
     }
 
-=======
->>>>>>> patch_branch
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void InvalidAutoExceptionHandler(InvalidAutoException invalidAutoException) {
