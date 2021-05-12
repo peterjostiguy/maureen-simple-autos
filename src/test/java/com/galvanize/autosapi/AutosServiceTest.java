@@ -78,28 +78,24 @@ public class AutosServiceTest {
 
   @Test
   void saveAuto() {
+    Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
+
+    auto.setColor("purple");
+    auto.setOwner("carl");
+
+    when(autosRepository.saveAuto(any(Auto.class))).thenReturn(auto);
+
+
+    Auto actual = autosService.saveAuto(auto);
+
+    assertEquals("carl", actual.getOwner());
+    assertEquals("purple", actual.getColor());
   }
 
   @Test
   void deleteAuto() {
+
   }
-
-//  @Test
-//  public void getAutosByColorAndMake() {
-//    Auto auto1 = new Auto("red", "toyota", "camry", 2016, "abc1239", "bob");
-//    autosService.autosList.autos.add(auto1);
-//    ArrayList<Auto> autos1 = new ArrayList<>();
-//    autos1.add(auto1);
-//
-//    assertEquals(autos1.get(0), autosService.getAutos("red", "toyota").autos.get(0));
-//  }
-
-//  @Test
-//  public void testGetAutoByVin() {
-//
-//    assertEquals(autosService.autosList.autos.get(3), autosService.getAutoByVin("abc1233"));
-//
-//  }
 
 
 }

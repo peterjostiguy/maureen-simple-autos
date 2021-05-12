@@ -12,4 +12,6 @@ public interface AutosRepository extends JpaRepository<Auto, Long> {
     Auto findByVin(String vin);
 
     Auto addAuto(Auto auto);
+
+    Auto saveAuto(Auto auto);
 }

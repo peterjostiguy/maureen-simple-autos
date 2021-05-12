@@ -34,7 +34,7 @@ public class AutosService {
     }
 
     public Auto saveAuto(Auto auto) {
-        return null;
+        return autosRepository.saveAuto(auto);
     }
 
     public ArrayList<Auto> deleteAuto(String vin) {
