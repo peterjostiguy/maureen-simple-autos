@@ -37,8 +37,13 @@ public class AutosService {
         return autosRepository.saveAuto(auto);
     }
 
-    public ArrayList<Auto> deleteAuto(String vin) {
-        return null;
+    public void deleteAuto(String vin) {
+        Auto auto = autosRepository.findByVin(vin);
+        if (auto != null) {
+            autosRepository.deleteAuto(auto);
+        } else {
+            throw new InvalidAutoException("Auto not found");
+        }
     }
 
 }

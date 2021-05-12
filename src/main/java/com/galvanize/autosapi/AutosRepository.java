@@ -14,4 +14,7 @@ public interface AutosRepository extends JpaRepository<Auto, Long> {
     Auto addAuto(Auto auto);
 
     Auto saveAuto(Auto auto);
+
+    void deleteAuto(Auto auto);
+
 }

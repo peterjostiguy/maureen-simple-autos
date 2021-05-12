@@ -4,6 +4,7 @@ package com.galvanize.autosapi;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -85,7 +86,6 @@ public class AutosServiceTest {
 
     when(autosRepository.saveAuto(any(Auto.class))).thenReturn(auto);
 
-
     Auto actual = autosService.saveAuto(auto);
 
     assertEquals("carl", actual.getOwner());
@@ -94,7 +94,12 @@ public class AutosServiceTest {
 
   @Test
   void deleteAuto() {
+    Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
 
+    when(autosRepository.findByVin(anyString())).thenReturn(auto);
+    autosService.deleteAuto(auto.getVin());
+
+    verify(autosRepository).delete(any(Auto.class));
   }
 
 
