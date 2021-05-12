@@ -39,7 +39,6 @@ public class AutosControllerTest {
       autosList.add(new Auto("silver", "honda", "civic", 2016, "abc123" + i, "bob"));
     }
   }
-
     public String toJSON(Object auto) throws JsonProcessingException {
       ObjectMapper mapper = new ObjectMapper();
       return mapper.writeValueAsString(auto);

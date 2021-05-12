@@ -1,10 +1,14 @@
 package com.galvanize.autosapi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.AssertFalse.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +45,13 @@ public class AutosServiceTest {
   }
 
   @Test
-  void testGetAutos() {
+  void getAutosBySearch() {
+    Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
+    auto.setColor("red");
+    when(autosRepository.findByColorAndMake(anyString(),anyString())).thenReturn(Arrays.asList(auto));
+    AutosList autosList = autosService.getAutos("red", "honda");
+    assertNotNull(autosList);
+    assertNotEquals(0, autosList.getAutos().size());
   }
 
   @Test

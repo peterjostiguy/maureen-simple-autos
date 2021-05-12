@@ -2,6 +2,8 @@ package com.galvanize.autosapi;
 
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +20,9 @@ public class AutosService {
     }
 
     public AutosList getAutos(String color, String make) {
-       return null;
+        List<Auto> autos = autosRepository.findByColorAndMake(color, make);
+        return new AutosList(autos);
+
     }
 
     public Auto getAutoByVin(String vin) {
