@@ -30,7 +30,7 @@ public class AutosService {
     }
 
     public Auto addAuto(Auto auto) {
-        return null;
+        return autosRepository.addAuto(auto);
     }
 
     public Auto saveAuto(Auto auto) {

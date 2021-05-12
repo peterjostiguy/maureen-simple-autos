@@ -2,6 +2,7 @@ package com.galvanize.autosapi;
 
 //import static org.junit.jupiter.api.AssertFalse.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -60,12 +61,19 @@ public class AutosServiceTest {
     when(autosRepository.findByVin(anyString())).thenReturn(auto);
     Auto actual = autosService.getAutoByVin("abc1230");
     assertNotNull(actual);
-    assertEquals(actual.getMake(), "honda");
+    assertEquals("honda", actual.getMake());
 
   }
 
   @Test
   void addAuto() {
+    Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
+    when(autosRepository.addAuto(any(Auto.class))).thenReturn(auto);
+    Auto actual = autosService.addAuto(auto);
+    assertNotNull(actual);
+    assertEquals("honda", actual.getMake());
+
+
   }
 
   @Test
