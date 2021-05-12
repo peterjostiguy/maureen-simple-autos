@@ -1,43 +1,29 @@
 package com.galvanize.autosapi;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class AutosList {
 
-  ArrayList<Auto> list;
+  ArrayList<Auto> autos;
 
   public AutosList() {
-    this.list = new ArrayList<>();
+    this.autos = new ArrayList<>();
   }
 
-  public AutosList(ArrayList<Auto> autosList) {
-    this.list = autosList;
+  public AutosList(ArrayList<Auto> autos) {
+    this.autos = autos;
   }
 
-  public ArrayList<Auto> getList() {
-    return list;
+  public ArrayList<Auto> getAutos() {
+    return autos;
   }
 
-  public void setList(ArrayList<Auto> list) {
-    this.list = list;
+  public void setAutos(ArrayList<Auto> autos) {
+    this.autos = autos;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    AutosList autosList = (AutosList) o;
-    return Objects.equals(list, autosList.list);
+  public boolean isEmpty() {
+    return autos.isEmpty();
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(list);
   }
-
-  @Override
-  public String toString(){
-    return "AutosList{" + "autos=" + list + "}";
-  }
-}

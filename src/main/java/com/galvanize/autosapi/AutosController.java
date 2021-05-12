@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/autos")
 public class AutosController {
 
     AutosService autosService;
@@ -13,7 +14,7 @@ public class AutosController {
         this.autosService = autosService;
     }
 
-    @GetMapping("/api/autos")
+    @GetMapping
     public ResponseEntity<AutosList> getAutos(@RequestParam(required = false) String color,
         @RequestParam(required = false) String make) {
         AutosList autosList;
@@ -22,23 +23,23 @@ public class AutosController {
         } else {
             autosList = autosService.getAutos(color, make);
         }
-        return autosList.list.size() == 0 ? ResponseEntity.noContent().build() :
+        return autosList.autos.size() == 0 ? ResponseEntity.noContent().build() :
             ResponseEntity.ok(autosList);
     }
 
-    @GetMapping("/api/autos/{vin}")
+    @GetMapping("/{vin}")
     public ResponseEntity<Auto> getAutoByVin(@PathVariable String vin) {
         Auto auto = autosService.getAutoByVin(vin);
         return auto == null ? ResponseEntity.noContent().build()
             : ResponseEntity.ok(auto);
     }
 
-    @PostMapping("api/autos")
+    @PostMapping
     public Auto addAuto(@RequestBody Auto auto) {
         return autosService.addAuto(auto);
     }
 
-    @PatchMapping("api/autos/{vin}")
+    @PatchMapping("/{vin}")
     public Auto updateAuto(@PathVariable String vin, @RequestBody UpdateRequest updateRequest) {
 
         Auto auto = autosService.updateAuto(vin, updateRequest.getColor(), updateRequest.getOwner());

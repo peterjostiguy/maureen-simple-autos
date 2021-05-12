@@ -4,11 +4,14 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,13 +27,15 @@ public class AutosControllerTest {
   @MockBean
   AutosService autosService;
 
-  AutosList autosList;
+  ArrayList<Auto> autosList;
 
+  @BeforeEach
   void setUp() {
-    autosList = new AutosList();
-    autosList.list.add(new Auto("green", "Ford", "joe"));
-    autosList.list.add(new Auto("red", "Honda", "bob"));
-    autosList.list.add(new Auto("gold", "Nissan", "lucy"));
+    autosList = new ArrayList<>();
+
+    for (int i = 0; i < 5; i++) {
+      autosList.add(new Auto("silver", "honda", "civic", 2016, "abc123" + i, "bob"));
+    }
 
   }
 
@@ -39,12 +44,12 @@ public class AutosControllerTest {
   @Test
   void getRequest_noParams_SuccessfullyReturnsAllAutos() throws Exception {
     setUp();
-    when(autosService.getAutos()).thenReturn(autosList);
+    when(autosService.getAutos()).thenReturn(new AutosList(autosList));
 
     mockMvc.perform(get("/api/autos"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.list", hasSize(3)));
+        .andExpect(jsonPath("$.autos", hasSize(5)));
   }
 
 // GET: /api/autos no autos in database returns 204 no content
@@ -63,32 +68,25 @@ public class AutosControllerTest {
 // GET: /api/autos?make=Honda&color=SILVER returns all silver Honda cars
   @Test
   void getRequest_params_SuccessfullyReturnsCorrectCars() throws Exception {
-
-    setUp();
-    when(autosService.getAutos(anyString(),anyString())).thenReturn(new AutosList(autosList.list));
+    when(autosService.getAutos(anyString(),anyString())).thenReturn(new AutosList(autosList));
 
     mockMvc.perform(get("/api/autos?color=red&make=Honda"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.list", hasSize(3)));
+            .andExpect(jsonPath("$.autos", hasSize(5)));
   }
 
   // GET
 // GET: /api/autos/{vin} returns specific car with the VIN number specified
 @Test
   public void getRequest_vinParam_ReturnsSingleCar() throws Exception{
-//    setUp();
-    autosList = new AutosList();
-    Auto auto1 = new Auto("abc123");
-    autosList.list.add(auto1);
-    autosList.list.add(new Auto("123abc"));
+    Auto auto = autosList.get(0);
+    when(autosService.getAutoByVin(anyString())).thenReturn(auto);
 
-    when(autosService.getAutoByVin(anyString())).thenReturn(auto1);
-
-    mockMvc.perform(get("/api/autos/" + auto1.getVin()))
+    mockMvc.perform(get("/api/autos/" + auto.getVin()))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("vin").value("abc123"));
+        .andExpect(jsonPath("vin").value(auto.getVin()));
 }
 
 // GET: /api/autos/{vin} returns NoContent 204 error
@@ -108,14 +106,14 @@ void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
 // POST: /api/autos?make=Ford&color=GOLD returns a newly created gold Ford car
 @Test
   void postRequest_Params_SuccessfullyPostsCar() throws Exception {
-    when(autosService.addAuto(any(Auto.class))).thenReturn(new Auto("red", "Honda", "jay"));
+    Auto auto = autosList.get(0);
+    when(autosService.addAuto(any(Auto.class))).thenReturn(auto);
 
     mockMvc.perform(post("/api/autos")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"color\":\"red\", \"make\":\"Honda\"}"))
+        .content("{\"color\":\"silver\", \"make\":\"honda\", \"model\":\"civic\", \"year\":\"1996\", \"vin\":\"abc123\", \"owner\":\"bob\"}")) //TODO add object mapper reference
         .andExpect(status().isOk())
-        .andExpect(jsonPath("color").value("red"))
-        .andExpect(jsonPath("make").value("Honda"));
+        .andExpect(jsonPath("vin").value(auto.getVin()));
 }
 
 // POST: /api/autos returns a 400 error if there is a bad request
@@ -124,29 +122,13 @@ void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
   when(autosService.addAuto(any(Auto.class))).thenThrow(InvalidAutoException.class);
 
   mockMvc.perform(post("/api/autos")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content("{\"color\":\"red\", \"make\":\"Honda\"}"))
+          .contentType(MediaType.APPLICATION_JSON))
+         // .content("{\"color\":\"red\", \"make\":\"Honda\"}")) //TODO object mapper
           .andExpect(status().isBadRequest());
 }
 
   //PATCH
 // PATCH: /api/autos/{vin} updates and returns the specified vehicle
-  @Test
-  void updateRequest_vinParam_ReturnsUpdatedAuto() throws Exception {
-    autosList = new AutosList();
-    Auto auto1 = new Auto("abc123");
-    autosList.list.add(auto1);
-
-    when(autosService.updateAuto(anyString(),anyString(),anyString())).thenReturn(auto1);
-
-    mockMvc.perform(patch("/api/autos/" + auto1.getVin())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"color\":\"purple\", \"owner\":\"roy\"}"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("color").value("purple"))
-            .andExpect(jsonPath("owner").value("roy"));
-  }
-
 // PATCH: /api/autos/{vin} returns a 204 error if vehicle is not found
 // PATCH: /api/autos/{vin} returns a 400 error if there is a bad request
 

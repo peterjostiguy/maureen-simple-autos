@@ -4,32 +4,21 @@ public class Auto {
 
   private String color;
   private String make;
-//  private Integer year;
+  private String model;
+  private Integer year;
   private String vin;
   private String owner;
 
-  public Auto() {
+  public Auto() {}
 
-  }
-
-  public Auto(String color, String make, String owner) {
+  public Auto(String color, String make, String model, Integer year, String vin,
+      String owner) {
     this.color = color;
     this.make = make;
+    this.model = model;
+    this.year = year;
+    this.vin = vin;
     this.owner = owner;
-//    this.year = year;
-//    this.vin = vin;
-  }
-
-  public Auto(String vin) {
-    this.vin = vin;
-  }
-
-  public String getVin() {
-    return vin;
-  }
-
-  public void setVin(String vin) {
-    this.vin = vin;
   }
 
   public String getColor() {
@@ -48,6 +37,30 @@ public class Auto {
     this.make = make;
   }
 
+  public String getModel() {
+    return model;
+  }
+
+  public void setModel(String model) {
+    this.model = model;
+  }
+
+  public Integer getYear() {
+    return year;
+  }
+
+  public void setYear(Integer year) {
+    this.year = year;
+  }
+
+  public String getVin() {
+    return vin;
+  }
+
+  public void setVin(String vin) {
+    this.vin = vin;
+  }
+
   public String getOwner() {
     return owner;
   }
@@ -55,8 +68,4 @@ public class Auto {
   public void setOwner(String owner) {
     this.owner = owner;
   }
-
-  //  @Override
-//  public String toString() {return make + ", " + color;}
-
 }
