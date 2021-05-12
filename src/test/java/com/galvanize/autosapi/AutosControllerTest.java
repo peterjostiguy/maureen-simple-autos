@@ -3,13 +3,17 @@ package com.galvanize.autosapi;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +40,13 @@ public class AutosControllerTest {
     for (int i = 0; i < 5; i++) {
       autosList.add(new Auto("silver", "honda", "civic", 2016, "abc123" + i, "bob"));
     }
-
   }
+
+    public String toJSON(Object auto) throws JsonProcessingException {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.writeValueAsString(auto);
+
+    }
 
   //GETALL
 // GET: /api/autos returns list of all autos in database
@@ -111,7 +120,7 @@ void getRequest_vinParam_SuccessfullyReturns204Code() throws Exception {
 
     mockMvc.perform(post("/api/autos")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"color\":\"silver\", \"make\":\"honda\", \"model\":\"civic\", \"year\":\"1996\", \"vin\":\"abc123\", \"owner\":\"bob\"}")) //TODO add object mapper reference
+        .content(toJSON(auto)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("vin").value(auto.getVin()));
 }
@@ -122,9 +131,9 @@ void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
   when(autosService.addAuto(any(Auto.class))).thenThrow(InvalidAutoException.class);
 
   mockMvc.perform(post("/api/autos")
-          .contentType(MediaType.APPLICATION_JSON))
-         // .content("{\"color\":\"red\", \"make\":\"Honda\"}")) //TODO object mapper
-          .andExpect(status().isBadRequest());
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(toJSON(autosList.get(0))))
+      .andExpect(status().isBadRequest());
 }
 
   //PATCH
@@ -135,7 +144,26 @@ void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
 
   //DELETE
 // DELETE: /api/autos/{vin} Returns 202 response if delete request accepted
+  @Test
+  void deleteAuto_withVin_returns202() throws Exception {
+    Auto auto = autosList.get(0);
+    when(autosService.deleteAuto(anyString())).thenReturn(autosList);
+
+    mockMvc.perform(delete("/api/autos/" + auto.getVin()))
+        .andExpect(status().isAccepted());
+  }
+
 // DELETE: /api/autos/{vin} Returns 204 error if vehicle is not found
+@Test
+void deleteAuto_withVin_returnsVehicleNotFound() throws Exception {
+  when(autosService.deleteAuto(anyString())).thenReturn(autosList);
+
+  mockMvc.perform(get("/api/autos/mvk342"))
+      .andDo(print())
+      .andExpect(status().isNoContent());
+}
+
+
 // DELETE: /api/autos/{vin} Returns 400 error if there is a bad request
 
 

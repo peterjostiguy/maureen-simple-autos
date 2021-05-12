@@ -35,4 +35,8 @@ public class AutosService {
     public Auto updateAuto(String vin, String color, String owner) {
         return null;
     }
+
+    public ArrayList<Auto> deleteAuto(String vin) {
+        return null;
+    }
 }
