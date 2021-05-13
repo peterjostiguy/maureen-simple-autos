@@ -1,6 +1,7 @@
 package com.galvanize.autosapi;
 
 //import static org.junit.jupiter.api.AssertFalse.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,7 +52,7 @@ public class AutosServiceTest {
   void getAutosBySearch() {
     Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
     auto.setColor("red");
-    when(autosRepository.findByColorAndMake(anyString(),anyString())).thenReturn(Arrays.asList(auto));
+    when(autosRepository.findByColorContainsAndMakeContains(anyString(),anyString())).thenReturn(Arrays.asList(auto));
     AutosList autosList = autosService.getAutos("red", "honda");
     assertNotNull(autosList);
     assertNotEquals(0, autosList.getAutos().size());
@@ -70,7 +71,7 @@ public class AutosServiceTest {
   @Test
   void addAuto() {
     Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
-    when(autosRepository.addAuto(any(Auto.class))).thenReturn(auto);
+    when(autosRepository.save(any(Auto.class))).thenReturn(auto);
     Auto actual = autosService.addAuto(auto);
     assertNotNull(actual);
     assertEquals("honda", actual.getMake());
@@ -83,8 +84,9 @@ public class AutosServiceTest {
     Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
     auto.setColor("purple");
     auto.setOwner("carl");
-    when(autosRepository.saveAuto(any(Auto.class))).thenReturn(auto);
+    when(autosRepository.save(any(Auto.class))).thenReturn(auto);
     Auto actual = autosService.saveAuto(auto);
+
     assertEquals("carl", actual.getOwner());
     assertEquals("purple", actual.getColor());
   }
@@ -94,7 +96,7 @@ public class AutosServiceTest {
     Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
     when(autosRepository.findByVin(anyString())).thenReturn(auto);
     autosService.deleteAuto(auto.getVin());
-    verify(autosRepository).deleteAuto(any(Auto.class));
+    verify(autosRepository).delete(any(Auto.class));
   }
 
   @Test

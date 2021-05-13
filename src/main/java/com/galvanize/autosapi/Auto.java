@@ -1,17 +1,35 @@
 package com.galvanize.autosapi;
 
-public class Auto {
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
+@Entity
+@Table(name = "autos")
+public class Auto {
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
   private String color;
+  @Column(length = 50)
   private String make;
   private String model;
-  private Integer year;
+  @Column(name = "model_year")
+  private int year;
   private String vin;
+  @Column(name = "owner_name")
   private String owner;
+  @JsonFormat(pattern = "MM/dd/yyyy")
+  private Date purchaseDate;
 
   public Auto() {}
 
-  public Auto(String color, String make, String model, Integer year, String vin,
+  public Auto(String color, String make, String model, int year, String vin,
       String owner) {
     this.color = color;
     this.make = make;
