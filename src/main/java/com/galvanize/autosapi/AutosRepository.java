@@ -7,14 +7,7 @@ import java.util.List;
 
 @Repository
 public interface AutosRepository extends JpaRepository<Auto, Long> {
-    List<Auto> findByColorAndMake(String color, String make);
+    List<Auto> findByColorContainsAndMakeContains(String color, String make);
 
     Auto findByVin(String vin);
-
-    Auto addAuto(Auto auto);
-
-    Auto saveAuto(Auto auto);
-
-    void deleteAuto(Auto auto);
-
 }

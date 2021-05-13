@@ -1,10 +1,8 @@
 package com.galvanize.autosapi;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +19,7 @@ public class AutosService {
     }
 
     public AutosList getAutos(String color, String make) {
-        List<Auto> autos = autosRepository.findByColorAndMake(color, make);
+        List<Auto> autos = autosRepository.findByColorContainsAndMakeContains(color, make);
         return new AutosList(autos);
 
     }
@@ -31,17 +29,17 @@ public class AutosService {
     }
 
     public Auto addAuto(Auto auto) {
-        return autosRepository.addAuto(auto);
+        return autosRepository.save(auto);
     }
 
     public Auto saveAuto(Auto auto) {
-        return autosRepository.saveAuto(auto);
+        return autosRepository.save(auto);
     }
 
     public void deleteAuto(String vin) {
         Auto auto = autosRepository.findByVin(vin);
         if (auto != null) {
-            autosRepository.deleteAuto(auto);
+            autosRepository.delete(auto);
         } else {
             throw new InvalidAutoException("Auto not found");
         }
