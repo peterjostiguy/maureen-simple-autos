@@ -4,6 +4,11 @@ public class UpdateRequest {
     private String color;
     private String owner;
 
+    public UpdateRequest(String color, String owner) {
+        this.color = color;
+        this.owner = owner;
+    }
+
     public String getOwner() {
         return owner;
     }
