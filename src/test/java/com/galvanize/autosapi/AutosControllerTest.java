@@ -169,16 +169,18 @@ void postRequest_Params_ReturnsErrorWithBadRequest() throws Exception {
   @Test
   void deleteAuto_withVin_returns202() throws Exception {
     Auto auto = autosList.get(0);
-    when(autosService.deleteAuto(anyString())).thenReturn(autosList);
+    when(autosService.getAutoByVin(anyString())).thenReturn(auto);
 
     mockMvc.perform(delete("/api/autos/" + auto.getVin()))
         .andExpect(status().isAccepted());
+
+    verify(autosService).deleteAuto(anyString());
   }
 
 // DELETE: /api/autos/{vin} Returns 204 error if vehicle is not found
 @Test
 void deleteAuto_withVin_returnsVehicleNotFound() throws Exception {
-  when(autosService.deleteAuto(anyString())).thenReturn(null);
+  when(autosService.getAutoByVin(anyString())).thenReturn(null);
 
   mockMvc.perform(get("/api/autos/mvk342"))
       .andDo(print())

@@ -55,9 +55,19 @@ public class AutosController {
     }
 
     @DeleteMapping("/{vin}")
-    public ResponseEntity deleteAuto(@PathVariable String vin) {
-        return getAutoByVin(vin) == null ? ResponseEntity.noContent().build() : ResponseEntity.accepted().build();
+    public ResponseEntity<String> deleteAuto(@PathVariable String vin) {
+        Auto auto = autosService.getAutoByVin(vin);
+        if (auto != null){
+            autosService.deleteAuto(vin);
+            return ResponseEntity.accepted().build();
+        }else {
+            return ResponseEntity.noContent().build();
+        }
     }
+
+
+//        return getAutoByVin(vin) == null ? ResponseEntity.noContent().build() : ResponseEntity.accepted().build();
+//    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

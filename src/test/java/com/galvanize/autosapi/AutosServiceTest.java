@@ -1,6 +1,7 @@
 package com.galvanize.autosapi;
 
 //import static org.junit.jupiter.api.AssertFalse.assertFalse;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -80,14 +81,10 @@ public class AutosServiceTest {
   @Test
   void saveAuto() {
     Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
-
     auto.setColor("purple");
     auto.setOwner("carl");
-
     when(autosRepository.saveAuto(any(Auto.class))).thenReturn(auto);
-
     Auto actual = autosService.saveAuto(auto);
-
     assertEquals("carl", actual.getOwner());
     assertEquals("purple", actual.getColor());
   }
@@ -95,12 +92,17 @@ public class AutosServiceTest {
   @Test
   void deleteAuto() {
     Auto auto = new Auto("silver", "honda", "civic", 2016, "abc1230", "bob");
-
     when(autosRepository.findByVin(anyString())).thenReturn(auto);
     autosService.deleteAuto(auto.getVin());
-
-    verify(autosRepository).delete(any(Auto.class));
+    verify(autosRepository).deleteAuto(any(Auto.class));
   }
+
+  @Test
+  void deleteAutoDoesNotExist() {
+    when(autosRepository.findByVin(anyString())).thenReturn(null);
+    assertThatExceptionOfType(InvalidAutoException.class).isThrownBy(()->{autosService.deleteAuto("vin");});
+  }
+
 
 
 }
