@@ -1,6 +1,7 @@
 package com.galvanize.autosapi;
 
 //import static org.junit.jupiter.api.AssertFalse.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,6 +86,7 @@ public class AutosServiceTest {
     auto.setOwner("carl");
     when(autosRepository.save(any(Auto.class))).thenReturn(auto);
     Auto actual = autosService.saveAuto(auto);
+
     assertEquals("carl", actual.getOwner());
     assertEquals("purple", actual.getColor());
   }

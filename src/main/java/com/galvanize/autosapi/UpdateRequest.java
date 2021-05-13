@@ -8,8 +8,18 @@ public class UpdateRequest {
         return owner;
     }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+
     public String getColor() {
         return color;
     }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
 
 }

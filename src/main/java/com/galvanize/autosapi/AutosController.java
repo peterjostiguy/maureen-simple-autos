@@ -47,12 +47,11 @@ public class AutosController {
         Auto auto = autosService.getAutoByVin(vin);
         if(auto == null){
             return ResponseEntity.noContent().build();
-        } else {
-            auto.setOwner(updateRequest.getOwner());
-            auto.setColor(updateRequest.getColor());
-            auto = autosService.saveAuto(auto);
-            return ResponseEntity.ok(auto);
         }
+        auto.setOwner(updateRequest.getOwner());
+        auto.setColor(updateRequest.getColor());
+        auto = autosService.saveAuto(auto);
+        return ResponseEntity.ok(auto);
     }
 
     @DeleteMapping("/{vin}")
