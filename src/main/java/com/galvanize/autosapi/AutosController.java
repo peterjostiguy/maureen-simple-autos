@@ -23,8 +23,10 @@ public class AutosController {
         } else {
             autosList = autosService.getAutos(color, make);
         }
-        return autosList.autos.size() == 0 ? ResponseEntity.noContent().build() :
-            ResponseEntity.ok(autosList);
+        if (autosList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(autosList);
     }
 
     @GetMapping("/{vin}")
@@ -52,14 +54,21 @@ public class AutosController {
         }
     }
 
-<<<<<<< HEAD
     @DeleteMapping("/{vin}")
-    public ResponseEntity deleteAuto(@PathVariable String vin) {
-        return getAutoByVin(vin) == null ? ResponseEntity.noContent().build() : ResponseEntity.accepted().build();
+    public ResponseEntity<String> deleteAuto(@PathVariable String vin) {
+        Auto auto = autosService.getAutoByVin(vin);
+        if (auto != null){
+            autosService.deleteAuto(vin);
+            return ResponseEntity.accepted().build();
+        }else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
-=======
->>>>>>> patch_branch
+
+//        return getAutoByVin(vin) == null ? ResponseEntity.noContent().build() : ResponseEntity.accepted().build();
+//    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void InvalidAutoExceptionHandler(InvalidAutoException invalidAutoException) {
