@@ -3,7 +3,7 @@ image: adoptopenjdk:11
 stages:
   - build
   - test
-  - production
+  - deploy
 build:
   stage: build
   script:
