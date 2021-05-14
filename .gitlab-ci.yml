@@ -20,6 +20,7 @@ test:
       - build/test-results/test/TEST*.xml
 
 #production:
+
 stage: deploy
 image: ruby:latest
 script:
