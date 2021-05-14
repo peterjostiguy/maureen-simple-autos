@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AutosApiApplicationTests {
   @Autowired
   TestRestTemplate testRestTemplate;
-//  PatchRestTemplate patchRestTemplate;
   RestTemplate restTemplate;
 
   @Autowired
