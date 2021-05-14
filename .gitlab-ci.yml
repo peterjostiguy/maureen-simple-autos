@@ -19,7 +19,7 @@ test:
     paths:
       - build/test-results/test/TEST*.xml
 
-production:
+#production:
 stage: deploy
 image: ruby:latest
 script:
