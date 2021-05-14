@@ -27,7 +27,7 @@ script:
   - apt-get install -y ruby-dev
   - gem install dpl
   #                        App name from prev step  Key from your heroku account
-  - dpl --provider=heroku --app=auto-api-maureen --api-key=$HEROKU_API_KEY
+  - dpl --provider=heroku --app=auto-apis-maureen --api-key=$HEROKU_API_KEY
 only: # Heroku will ONLY deploy from main or master branch!
   - master
 
