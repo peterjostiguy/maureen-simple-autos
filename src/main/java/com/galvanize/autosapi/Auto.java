@@ -21,6 +21,7 @@ public class Auto {
   private String model;
   @Column(name = "model_year")
   private int year;
+  @Column(unique = true)
   private String vin;
   @Column(name = "owner_name")
   private String owner;
@@ -63,11 +64,11 @@ public class Auto {
     this.model = model;
   }
 
-  public Integer getYear() {
+  public int getYear() {
     return year;
   }
 
-  public void setYear(Integer year) {
+  public void setYear(int year) {
     this.year = year;
   }
 
@@ -85,6 +86,14 @@ public class Auto {
 
   public void setOwner(String owner) {
     this.owner = owner;
+  }
+
+  public Date getPurchaseDate() {
+    return purchaseDate;
+  }
+
+  public void setPurchaseDate(Date purchaseDate) {
+    this.purchaseDate = purchaseDate;
   }
 
   @Override

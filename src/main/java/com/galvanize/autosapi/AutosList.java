@@ -1,5 +1,6 @@
 package com.galvanize.autosapi;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class AutosList {
     this.autos = autos;
   }
 
+  @JsonIgnore
   public boolean isEmpty() {
     return autos.isEmpty();
   }
