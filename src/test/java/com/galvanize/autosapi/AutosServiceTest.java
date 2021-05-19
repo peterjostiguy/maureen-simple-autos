@@ -1,7 +1,5 @@
 package com.galvanize.autosapi;
 
-//import static org.junit.jupiter.api.AssertFalse.assertFalse;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

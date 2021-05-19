@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
-import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +23,7 @@ import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations= "classpath:application-test.properties")
