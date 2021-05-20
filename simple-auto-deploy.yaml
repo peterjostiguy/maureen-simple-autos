@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autos-api-paul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autos-api-paul
+  template:
+    metadata:
+      labels:
+        app: autos-api-paul
+    spec:
+      containers:
+      - image: $IMAGE
+        name: autos-api-paul
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+            - name: DB_HOST
+              value: 52.26.72.203
+            - name: DB_NAME
+              value: pcutter
+            - name: DB_USER
+              value: pcutter_user
+            - name: DB_PWD
+              value: 'ER3Fhq-#PAhnH-r'
+      imagePullSecrets:
+        - name: pc-auto-token

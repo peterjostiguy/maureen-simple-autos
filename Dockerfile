@@ -1,14 +1,30 @@
-# Uses Open JDK as base image, the tag 8-jdk-alpine denotes the "version" we are using
-FROM adoptopenjdk:11
+FROM ubuntu:18.04
+WORKDIR /app
 
-# Set the working directory inside the container when run, here it is root
-WORKDIR /
+# Setup the environment
+RUN apt-get update
 
-# Take the jar from the build folder and add it as springweb.jar. This will require there to be a build already in that directory. Please modify the first path to your needs.
-COPY build/libs/autos-api-0.0.1-SNAPSHOT.jar springweb.jar
+# Needed for command envsubst to work
+RUN apt-get install gettext-base
+# Install curl
+RUN apt-get install -y curl
+# Install unzip
+RUN apt-get install -y unzip
+# Install vim
+RUN apt-get install -y vim
 
-# Remember how we mapped container ports to our host's port? This is how you expose the port you wish. It exposes PORT 8080.
-EXPOSE 8080
+# install awscli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
 
-# Invoke java executable and run the springweb.jar file. There is only ONE CMD instruction in a Dockerfile and it is used as default to executing the container. The CMD form can vary, refer to the Docker Docs: Dockerfile Reference on formatting these shell commands.
-CMD java -jar springweb.jar
+# install eksctl
+RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+RUN mv /tmp/eksctl /usr/local/bin
+
+# Download and install kubectl
+RUN apt-get install -y apt-transport-https ca-certificates curl
+RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+RUN apt-get update
+RUN apt-get install -y kubectl
