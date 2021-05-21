@@ -21,11 +21,11 @@ test:
     paths:
       - build/test-results/test/TEST*.xml
 
-codeCoverage:
+coverage:
   stage: coverage
   image: adoptopenjdk:11
   needs:
-    - build-my-project
+    - build
     - test
   script:
     - ./gradlew jacocoTestReport
@@ -66,5 +66,3 @@ deploy:
   script:
     - envsubst < simple-auto-deploy.yaml | kubectl apply -f -
     - kubectl apply -f simple-auto-service.yaml
-
-
