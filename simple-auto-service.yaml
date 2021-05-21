@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: autos-api-paul-lb
+  name: auto-api-pc-lb
 spec:
   type: LoadBalancer
   selector:
-    app: autos-api-paul
+    app: auto-api-pc
   ports:
     - protocol: TCP
       port: 80

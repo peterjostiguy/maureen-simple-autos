@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: autos-api-paul
+  name: auto-api-pc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: autos-api-paul
+      app: auto-api-pc
   template:
     metadata:
       labels:
-        app: autos-api-paul
+        app: auto-api-pc
     spec:
       containers:
-      - image: $IMAGE
-        name: autos-api-paul
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        env:
+        - image: registry.gitlab.com/galv-vmw-apr-2021/2-simple-autos/autos-api-maureen-paul:52
+          name: auto-api-pc
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
             - name: DB_HOST
               value: 52.26.72.203
             - name: DB_NAME
@@ -26,6 +26,6 @@ spec:
             - name: DB_USER
               value: pcutter_user
             - name: DB_PWD
-              value: 'ER3Fhq-#PAhnH-r'
-      imagePullSecrets:
+              value: ER3Fhq-#PAhnH-r
+      imagePullSecrets: # Be sure the token name matches what you created on K8s
         - name: pc-auto-token
