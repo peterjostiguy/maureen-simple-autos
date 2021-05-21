@@ -3,6 +3,7 @@ image: adoptopenjdk:11
 stages:
   - build
   - test
+  - coverage
   - deploy
   - docker
 build:
@@ -19,6 +20,22 @@ test:
   artifacts:
     paths:
       - build/test-results/test/TEST*.xml
+
+codeCoverage:
+  stage: coverage
+  image: adoptopenjdk:11
+  needs:
+    - build-my-project
+    - test
+  script:
+    - ./gradlew jacocoTestReport
+    - ./gradlew jacocoTestCoverageVerification
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - build/reports/jacoco/
+
 
 docker:
   stage: docker
